@@ -3,6 +3,8 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     private Rigidbody2D rb;
+    private Animator anim;
+    private bool isGrounded;
 
     [SerializeField]
     private float moveSpeed = 10f;
@@ -11,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
     }
 
     private void Update()
@@ -30,9 +33,28 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //Jump 
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space) && isGrounded)
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
+            Jump();
+        }
+
+        //Set animator parameters
+        anim.SetBool("isRunning", horizontalInput != 0);
+        anim.SetBool("isGrounded", isGrounded);
+    }
+
+    private void Jump()
+    {
+        rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
+        anim.SetTrigger("jump");
+        isGrounded = false;
+    }
+
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.tag == "Ground")
+        {
+            isGrounded = true;
         }
     }
 }
