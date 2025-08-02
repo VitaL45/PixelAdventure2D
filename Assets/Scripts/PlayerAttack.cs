@@ -27,11 +27,11 @@ public class PlayerAttack : MonoBehaviour
     {
         anim.SetTrigger("attack");
         cooldownTimer = 0;
+
         sandballs[FindSandball()].transform.position = firePoint.position;
         sandballs[FindSandball()].GetComponent<Projectile>().SetDirection(Mathf.Sign(transform.localScale.x));
     }
 
-    //Understand it later
     private int FindSandball()
     {
         for (int i = 0; i < sandballs.Length; i++)
