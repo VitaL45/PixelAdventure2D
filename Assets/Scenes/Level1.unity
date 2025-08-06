@@ -3620,8 +3620,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 1
-  activationDelay: 2
-  activeTime: 2
+  activationDelay: 1
+  activeTime: 3
 --- !u!1 &1951720743
 GameObject:
   m_ObjectHideFlags: 0
