@@ -177,13 +177,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 6
   jumpPower: 12
+  coyoteTime: 0.25
+  extraJumps: 1
+  wallJumpX: 1500
+  wallJumpY: 750
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
   wallLayer:
     serializedVersion: 2
     m_Bits: 64
-  myGravityScale: 4
+  jumpSound: {fileID: 8300000, guid: 1014026e21a36854794fc5f2e8cf08c3, type: 3}
 --- !u!95 &245493160372224863
 Animator:
   serializedVersion: 5
@@ -249,6 +253,8 @@ MonoBehaviour:
   components:
   - {fileID: 9027881329284417925}
   - {fileID: 846545802090748691}
+  hurtSound: {fileID: 8300000, guid: 71fb058e0de9e9040a8db4980511b962, type: 3}
+  deadSound: {fileID: 8300000, guid: 06867d9d97d59ce47934184835be8711, type: 3}
 --- !u!1 &8526628866860235177
 GameObject:
   m_ObjectHideFlags: 0

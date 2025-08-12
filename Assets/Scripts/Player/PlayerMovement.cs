@@ -8,13 +8,27 @@ public class PlayerMovement : MonoBehaviour
     private float wallJumpCooldown;
     private float horizontalInput;
     private bool jumping;
+    private float myGravityScale = 3f;
 
-
+    [Header("Movement Parameters")]
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private float jumpPower = 8f;
+
+    [Header("Coyote Time")]
+    [SerializeField] private float coyoteTime; //How much time the player can hang in the air before jumping
+    private float coyoteCounter; //How much time has passes since the player ran off the edge
+
+    [Header("Multiple Jumps")]
+    [SerializeField] private int extraJumps;
+    private int jumpCounter;
+
+    [Header("Wall Jumping")]
+    [SerializeField] private float wallJumpX;
+    [SerializeField] private float wallJumpY;
+
+    [Header("Layers")]
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private LayerMask wallLayer;
-    [SerializeField] private float myGravityScale = 3f;
 
     [Header("SFX")]
     [SerializeField] private AudioClip jumpSound;
@@ -57,36 +71,55 @@ public class PlayerMovement : MonoBehaviour
             rb.gravityScale = 0;
             rb.velocity = Vector2.zero;
         }
-        else
+        else 
         {
             rb.gravityScale = myGravityScale;
             rb.velocity = new Vector2(horizontalInput * moveSpeed, rb.velocity.y);
+
+            if (isGrounded())
+            {
+                coyoteCounter = coyoteTime; //Reset coyote counter when on the ground
+                jumpCounter = extraJumps;
+            }
+            else
+                coyoteCounter -= Time.deltaTime; //Start decreasing coyote counter when not on ground
         }
     }
 
     private void Jump()
     {
-        if(isGrounded())
+        if (coyoteCounter <= 0 && !onWall() && jumpCounter <= 0) return;
+        SoundManager.instance.PlaySound(jumpSound);
+
+        if (onWall())
+            WallJump();
+        else
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpPower);
-            SoundManager.instance.PlaySound(jumpSound);
-        }
-        else if(onWall() && !isGrounded())
-        {
-            if (horizontalInput == 0)
-            {
-                rb.velocity = new Vector2(-Mathf.Sign(transform.localScale.x) * 10, 0);
-                transform.localScale = new Vector3(-Mathf.Sign(transform.localScale.x), transform.localScale.y, transform.localScale.z);
-            }
+            if (isGrounded())
+                rb.velocity = new Vector2(rb.velocity.x, jumpPower);
             else
             {
-                rb.velocity = new Vector2(-Mathf.Sign(transform.localScale.x) * 3, 6);
-                anim.SetTrigger("wallJump");              
+                //If not on the ground and coyote counter is bigger than 0 do a normal jump
+                if (coyoteCounter > 0)
+                    rb.velocity = new Vector2(rb.velocity.x, jumpPower);
+                else
+                {
+                    if(jumpCounter > 0)
+                    {
+                        rb.velocity = new Vector2(rb.velocity.x, jumpPower);
+                        jumpCounter--;
+                    }
+                }
+
             }
-
-            wallJumpCooldown = 0;
+            //Reset coyote counter to 0 to avoid double jumps
+            coyoteCounter = 0;
         }
-
+    }
+    private void WallJump()
+    {
+        rb.AddForce(new Vector2(-Mathf.Sign(transform.localScale.x) * wallJumpX, wallJumpY));
+        wallJumpCooldown = 0;
     }
 
     private bool isGrounded()
