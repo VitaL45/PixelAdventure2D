@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
     private BoxCollider2D boxCollider;
     private float wallJumpCooldown;
     private float horizontalInput;
+    private bool jumping;
 
 
     [SerializeField] private float moveSpeed = 10f;
@@ -15,6 +16,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private LayerMask wallLayer;
     [SerializeField] private float myGravityScale = 3f;
 
+    [Header("SFX")]
+    [SerializeField] private AudioClip jumpSound;
 
     private void Awake()
     {
@@ -40,29 +43,25 @@ public class PlayerMovement : MonoBehaviour
         //Set animator parameters
         anim.SetBool("isRunning", horizontalInput != 0);
         anim.SetBool("isGrounded", isGrounded());
+         
+        //Jump
+        if (Input.GetKeyDown(KeyCode.Space))
+            Jump();
 
+        //Adjustable jump height
+        if (Input.GetKeyUp(KeyCode.Space) && rb.velocity.y > 0)
+            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y / 2);
 
-        //Wall jump logic
-        if(wallJumpCooldown > 0.2f)
+        if (onWall())
         {
-            rb.velocity = new Vector2(horizontalInput * moveSpeed, rb.velocity.y);
-
-            if (onWall() && !isGrounded())
-            {
-                rb.gravityScale = 0;
-                rb.velocity = Vector2.zero;
-            }
-            else
-                rb.gravityScale = myGravityScale;
-
-
-            if (Input.GetKey(KeyCode.Space))
-            {
-                Jump();
-            }
+            rb.gravityScale = 0;
+            rb.velocity = Vector2.zero;
         }
         else
-            wallJumpCooldown += Time.deltaTime;
+        {
+            rb.gravityScale = myGravityScale;
+            rb.velocity = new Vector2(horizontalInput * moveSpeed, rb.velocity.y);
+        }
     }
 
     private void Jump()
@@ -70,7 +69,7 @@ public class PlayerMovement : MonoBehaviour
         if(isGrounded())
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpPower);
-            anim.SetTrigger("jump");
+            SoundManager.instance.PlaySound(jumpSound);
         }
         else if(onWall() && !isGrounded())
         {
@@ -86,7 +85,6 @@ public class PlayerMovement : MonoBehaviour
             }
 
             wallJumpCooldown = 0;
-            
         }
 
     }

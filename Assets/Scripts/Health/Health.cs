@@ -17,6 +17,9 @@ public class Health : MonoBehaviour
     [Header("Componenets")]
     [SerializeField] private Behaviour[] components;
 
+    [Header("Hurt and death sounds")]
+    [SerializeField] private AudioClip hurtSound;
+    [SerializeField] private AudioClip deadSound;
     private void Awake()
     {
         currentHealth = startingHealth;
@@ -31,6 +34,7 @@ public class Health : MonoBehaviour
         if (currentHealth > 0)
         {
             anim.SetTrigger("hurt");
+            SoundManager.instance.PlaySound(hurtSound);
             StartCoroutine(Invunerability());
         }
         else
@@ -38,7 +42,7 @@ public class Health : MonoBehaviour
             if (!dead)
             {
                 anim.SetTrigger("die");
-
+                SoundManager.instance.PlaySound(deadSound);
                 //Deactivate all attached components
                 foreach (Behaviour component in components)
                 {

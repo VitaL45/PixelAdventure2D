@@ -166,6 +166,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healAmount: 3
+  pickupSound: {fileID: 8300000, guid: b2db5b20a3c177849a5117eb8025f598, type: 3}
 --- !u!1 &5601541770911414190
 GameObject:
   m_ObjectHideFlags: 0
