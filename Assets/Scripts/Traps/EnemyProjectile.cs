@@ -8,14 +8,14 @@ public class EnemyProjectile : EnemyDamage
     [SerializeField] private float resetTime;
     private float lifetime;
     private Animator anim;
-    private CircleCollider2D coll;
+    private Collider2D coll;
 
     private bool hit;
 
     private void Awake()
     {
         anim = GetComponent<Animator>();
-        coll = GetComponent<CircleCollider2D>();
+        coll = GetComponent<Collider2D>();
     }
 
     public void ActivateProjectile()

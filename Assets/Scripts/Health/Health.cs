@@ -35,7 +35,7 @@ public class Health : MonoBehaviour
         {
             anim.SetTrigger("hurt");
             SoundManager.instance.PlaySound(hurtSound);
-            StartCoroutine(Invunerability());
+            StartCoroutine(Invulnerability());
         }
         else
         {
@@ -60,7 +60,22 @@ public class Health : MonoBehaviour
         currentHealth = Mathf.Clamp(currentHealth + _healAmount, 0, startingHealth);
     }
 
-    private IEnumerator Invunerability()
+    public void Respawn()
+    {
+        dead = false;
+        Heal(startingHealth);
+        anim.ResetTrigger("die");
+        anim.Play("idle");
+        StartCoroutine(Invulnerability());
+
+        //Activate all attached components
+        foreach (Behaviour component in components)
+        {
+            component.enabled = true;
+        }
+    }
+
+    private IEnumerator Invulnerability()
     {
         Physics2D.IgnoreLayerCollision(7, 8, true);
         for (int i = 0; i < numberOfFlashes; i++) 
