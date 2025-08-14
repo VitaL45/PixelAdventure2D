@@ -3,6 +3,9 @@ using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
+    [Header("Menu Sounds")]
+    [SerializeField] private AudioClip menuSelect;
+
     [Header("Game Over")]
     [SerializeField] private GameObject gameOverScreen;
     [SerializeField] private AudioClip gameOverSound;
@@ -35,15 +38,18 @@ public class UIManager : MonoBehaviour
     public void Restart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SoundManager.instance.PlaySound(menuSelect);
     }
 
     public void MainMenu()
     {
         SceneManager.LoadScene(0);
+        SoundManager.instance.PlaySound(menuSelect);
     }
 
     public void Quit()
     {
+        SoundManager.instance.PlaySound(menuSelect);
         Application.Quit();
 
     #if UNITY_EDITOR
@@ -64,10 +70,12 @@ public class UIManager : MonoBehaviour
     public void SoundVolume()
     {
         SoundManager.instance.ChangeSoundVolume(0.2f);
+        SoundManager.instance.PlaySound(menuSelect);
     }
     public void MusicVolume()
     {
         SoundManager.instance.ChangeMusicVolume(0.05f);
+        SoundManager.instance.PlaySound(menuSelect);
     }
     #endregion
 }

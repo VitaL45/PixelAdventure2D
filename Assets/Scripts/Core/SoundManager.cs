@@ -31,7 +31,7 @@ public class SoundManager : MonoBehaviour
 
     public void ChangeSoundVolume(float _change)
     {
-        ChangeSourceVolume(1, "musicVolume", _change, soundSource);
+        ChangeSourceVolume(1, "soundVolume", _change, soundSource);
     }
 
     public void ChangeMusicVolume(float _change)
@@ -41,7 +41,7 @@ public class SoundManager : MonoBehaviour
 
     private void ChangeSourceVolume(float baseVolume, string volumeName, float change, AudioSource source)
     {
-        float currentVolume = PlayerPrefs.GetFloat(volumeName, 1);
+        float currentVolume = PlayerPrefs.GetFloat(volumeName, baseVolume);
         currentVolume += change;
 
         //Check if we reach maximum or minimum value
