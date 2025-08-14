@@ -36,7 +36,7 @@ public class Projectile : MonoBehaviour
         circleCollider.enabled = false;
         anim.SetTrigger("explode");
 
-        if (collision.tag == "Enemy")
+        if (collision.tag == "Enemy" && collision.GetComponent<Health>() != null)
             collision.GetComponent<Health>().TakeDamage(damage);
     }
 
