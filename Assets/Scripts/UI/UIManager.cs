@@ -26,7 +26,6 @@ public class UIManager : MonoBehaviour
             PauseGame(!pauseScreen.activeInHierarchy);
         }
     }
-
     #region Game Over
     //Activate game over screen
     public void GameOver()
@@ -74,7 +73,7 @@ public class UIManager : MonoBehaviour
     }
     public void MusicVolume()
     {
-        SoundManager.instance.ChangeMusicVolume(0.05f);
+        SoundManager.instance.ChangeMusicVolume(0.2f);
         SoundManager.instance.PlaySound(menuSelect);
     }
     #endregion
