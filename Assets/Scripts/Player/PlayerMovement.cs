@@ -8,7 +8,7 @@ public class PlayerMovement : MonoBehaviour
     private float wallJumpCooldown;
     private float horizontalInput;
     private bool jumping;
-    private float myGravityScale = 3f;
+    private float myGravityScale = 7f;
 
     [Header("Movement Parameters")]
     [SerializeField] private float moveSpeed = 10f;
